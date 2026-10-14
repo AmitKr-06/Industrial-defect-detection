@@ -1,62 +1,49 @@
-
-from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
+import torchvision.transforms as T
 from PIL import Image
 from torch.utils.data import Dataset
-import torchvision.transforms as T
 
-IMAGENET_MEAN = [0.485, 0.456, 0.406]
-IMAGENET_STD  = [0.229, 0.224, 0.225]
+from src.config import PROJECT_ROOT
+from src.constants import IMAGENET_MEAN, IMAGENET_STD
 
 
-def load_splits(csv_path, project_root):
-    """Read the saved split file and turn relative paths back into absolute ones."""
-    df = pd.read_csv(csv_path)
-    root = Path(project_root)
-    df["path"] = df["path"].apply(lambda p: str(root / p))
-    df["mask_path"] = df["mask_path"].apply(
-        lambda p: str(root / p) if isinstance(p, str) and p else None
-    )
+def load_splits(csv_path) -> pd.DataFrame:
+    """Read splits.csv and turn relative paths into absolute ones."""
+    df = pd.read_csv(csv_path, keep_default_na=False)
+    df["path"] = df["path"].apply(lambda p: str(PROJECT_ROOT / p))
+    df["mask_path"] = df["mask_path"].apply(lambda p: str(PROJECT_ROOT / p) if p else "")
     return df
 
-
 class MVTecDataset(Dataset):
-    """Returns image, mask, label, defect_type, path for one MVTec AD category."""
-
-    def __init__(self, records, image_size=256):
+    """Custom PyTorch Dataset for MVTec anomaly detection — wraps a DataFrame of image paths + labels."""
+    def __init__(self, records: pd.DataFrame, image_size: int = 256):
+        """Store the records table and set up the image transform (resize → tensor → ImageNet normalize)."""
         self.records = records.reset_index(drop=True)
         self.image_size = image_size
         self.img_tf = T.Compose([
-            T.Resize((image_size, image_size),
-                     interpolation=T.InterpolationMode.BILINEAR),
+            T.Resize((image_size, image_size), interpolation=T.InterpolationMode.BILINEAR),
             T.ToTensor(),
             T.Normalize(IMAGENET_MEAN, IMAGENET_STD),
         ])
 
+    # Tell PyTorch how many samples are in this dataset (used by DataLoader).
     def __len__(self):
         return len(self.records)
 
     def __getitem__(self, idx):
+        """Load one sample: read RGB image, load + binarize mask if it exists 
+        (else all-zero mask), and return image, mask, label, defect type, and path as a dict.
+        """
         r = self.records.iloc[idx]
-        image = self.img_tf(Image.open(r["path"]).convert("RGB"))
-
-        mp = r["mask_path"]
-        if isinstance(mp, str) and mp != "":
-            m = Image.open(mp).convert("L")
-            m = m.resize((self.image_size, self.image_size),
-                         Image.Resampling.NEAREST)
-            mask = torch.from_numpy(
-                (np.array(m) > 0).astype(np.float32)
-            ).unsqueeze(0)
+        with Image.open(r["path"]) as im:
+            image = self.img_tf(im.convert("RGB"))
+        if r["mask_path"]:
+            with Image.open(r["mask_path"]) as m:
+                m = m.convert("L").resize((self.image_size, self.image_size), Image.Resampling.NEAREST)  # keep binary
+            mask = torch.from_numpy((np.array(m) > 0).astype(np.float32)).unsqueeze(0)
         else:
             mask = torch.zeros(1, self.image_size, self.image_size)
-
-        return {
-            "image": image,
-            "mask": mask,
-            "label": int(r["label"]),
-            "defect_type": r["defect_type"],
-            "path": r["path"],
-        }
+        return {"image": image, "mask": mask, "label": int(r["label"]),
+                "detect_type": r["defect_type"], "path": r["path"]}
