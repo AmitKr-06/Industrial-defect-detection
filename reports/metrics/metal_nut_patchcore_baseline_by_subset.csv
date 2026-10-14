@@ -1,0 +1,8 @@
+subset,n_images,image_auroc,image_ap,pixel_auroc,aupro
+all test,115,0.9995,0.9999,0.9888,0.9366
+dev half,56,0.998,0.9995,0.9886,0.9305
+final half,59,1.0,1.0,0.9891,0.9427
+bent (+ good),47,1.0,1.0,0.9962,0.9812
+color (+ good),44,1.0,1.0,0.9952,0.9854
+flip (+ good),45,1.0,1.0,0.9871,0.9567
+scratch (+ good),45,0.998,0.9982,0.9799,0.9275

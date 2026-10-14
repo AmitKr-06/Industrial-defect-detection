@@ -1,0 +1,7 @@
+split,defect_type,n_images
+test,bent,25
+test,color,22
+test,flip,23
+test,good,22
+test,scratch,23
+train,good,220

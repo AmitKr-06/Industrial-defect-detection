@@ -1,0 +1,5 @@
+aggregation,image_auroc,image_ap
+max,0.9995,0.9999
+top 1% mean,0.998,0.9995
+top 0.1% mean,0.999,0.9998
+99.5th percentile,0.998,0.9995

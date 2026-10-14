@@ -1,0 +1,39 @@
+data_ingestion:
+  category: metal_nut
+  archive_name: metal_nut.tar.xz
+
+data_splitting:
+  val_fraction: 0.10
+  seed: 42            # also used for the dev/final split
+
+preprocessing:
+  image_size: 256
+  batch_size: 8
+
+feature_extraction:
+  layers: [layer2, layer3]   # candidate to test later: [layer2]
+  pool_kernel: 3
+  embed_dim: 1024            # null = keep all channels
+
+memory_bank:
+  ratio: 0.10
+  proj_dim: 128
+  seed: 42
+
+scoring:
+  sigma: 4.0
+  aggregation: max           # max | top1
+  chunk: 512
+
+threshold:
+  policy: max                # max | mean_std | quantile
+  k_std: 3.0
+  quantile: 0.99
+
+evaluation:
+  bench_warmup: 10
+  bench_reps: 3
+  reference:                 # reproduction gate (Exp 6)
+    image_auroc: 0.9995
+    pixel_auroc: 0.9888
+    aupro: 0.9378

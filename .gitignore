@@ -218,3 +218,43 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ===== Project-specific =====
+
+# Datasets (MVTec AD is CC BY-NC-SA, don't redistribute)
+data/*
+!data/.gitkeep
+*.tar.xz
+*.tar
+*.zip
+
+# Model artifacts, memory banks, checkpoints (large files)
+artifacts/*
+!artifacts/.gitkeep
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npy
+*.npz
+*.faiss
+*.pkl
+models/*
+!models/.gitkeep
+
+# Inference outputs and uploads from the API
+results/
+uploads/
+outputs/
+
+# Notebook outputs / scratch
+*.nbconvert.ipynb
+.virtual_documents/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+projectworkflow.txt

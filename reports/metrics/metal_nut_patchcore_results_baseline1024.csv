@@ -1,0 +1,2 @@
+model,category,embed_mode,embed_dim,split,bank_ratio,bank_patches,sigma,image_size,pool_kernel,image_auroc,image_ap,pixel_auroc,auro,precision,recall,f1,threshold,threshold_policy,latency_ms,peak_gpu_memory_mb
+patchcore_wrn50,metal_nut,baseline,1024,all test,0.1,20275,4.0,256,3,0.9995112414467253,0.9998856097002974,0.988782806756938,0.9378295998134125,0.9789,1.0,0.9894,1.1666,max of val normals,47.1,431.6

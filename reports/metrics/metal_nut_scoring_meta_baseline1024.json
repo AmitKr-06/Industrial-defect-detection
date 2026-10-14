@@ -1,0 +1,17 @@
+{
+  "category": "metal_nut",
+  "embed_mode": "baseline",
+  "embed_dim": 1024,
+  "image_size": 256,
+  "pool_kernel": 3,
+  "bank_ratio": 0.1,
+  "n_bank_patches": 20275,
+  "sigma": 4.0,
+  "score_aggregation": "max",
+  "threshold": 1.16659677028656,
+  "threshold_policy": "max of held-out normal image scores (n=22)",
+  "test_latency_ms": 48.38,
+  "peak_gpu_mb": 431.6,
+  "torch": "2.7.1+cu118",
+  "seed": 42
+}

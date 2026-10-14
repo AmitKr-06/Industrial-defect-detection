@@ -1,0 +1,31 @@
+# NOTE: install torch and torchvision first using the official PyTorch
+# selector (CUDA build), then: pip install -r requirements.txt
+
+# Core
+numpy
+pandas
+scipy
+scikit-learn
+scikit-image
+pillow
+opencv-python
+matplotlib
+tqdm
+pyyaml
+
+# Notebooks
+jupyterlab
+ipykernel
+ipywidgets
+
+# Backend
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+
+# Testing
+pytest
+httpx
+
+#-e .

@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-13",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "torch": "2.7.1+cu118",
+  "backbone": "wide_resnet50_2 layer2+layer3 (frozen)",
+  "bank_patches": 20275,
+  "bank_ratio": 0.1,
+  "sigma": 4.0,
+  "image_size": 256,
+  "pool_kernel": 3,
+  "seed": 42,
+  "threshold_policy": "max of held-out normal image scores"
+}

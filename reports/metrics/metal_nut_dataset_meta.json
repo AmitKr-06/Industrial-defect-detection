@@ -1,0 +1,24 @@
+{
+  "category": "metal_nut",
+  "dataset_root": "data/raw",
+  "n_train_normal": 220,
+  "n_test_normal": 22,
+  "n_test_defective": 93,
+  "defect_types": [
+    "bent",
+    "color",
+    "flip",
+    "scratch"
+  ],
+  "original_image_sizes": [
+    [
+      700,
+      700
+    ]
+  ],
+  "python": "3.11.17",
+  "torch": "2.7.1+cu118",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "date": "2026-10-12"
+}

@@ -1,0 +1,2 @@
+model,category,split,bank_ratio,sigma,image_size,image_auroc,image_ap,pixel_auroc,aupro,precision,recall,f1,threshold,latency_ms,peak_gpu_memory_mb
+patchcore_wrn50,metal_nut,all test,0.1,4.0,256,0.9995,0.9999,0.9888,0.9366,0.9789,1.0,0.9894,1.1672,50.6,405.9

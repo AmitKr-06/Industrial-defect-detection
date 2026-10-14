@@ -1,0 +1,2 @@
+config,image_size,pool_kernel,ratio,sigma,image_auroc,image_ap,pixel_auroc,aupro,latency_ms,peak_gpu_mb,bank_patches
+default,256,3,0.1,4.0,1.0,1.0,0.9891026212519283,0.9449364565682455,51.17554260872092,430.863872,20275

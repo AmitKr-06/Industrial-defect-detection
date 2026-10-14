@@ -1,0 +1,21 @@
+{
+  "category": "metal_nut",
+  "n_total_patches": 202752,
+  "ratios": [
+    0.01,
+    0.05,
+    0.1,
+    0.25
+  ],
+  "bank_sizes": {
+    "100%": 202752,
+    "1%": 2027,
+    "5%": 10137,
+    "10%": 20275,
+    "25%": 50688
+  },
+  "proj_dim": 128,
+  "seed": 42,
+  "greedy_selection_seconds": 165.8,
+  "peak_gpu_mb": 3038.7
+}

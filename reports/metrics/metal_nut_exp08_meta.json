@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-14",
+  "category": "metal_nut",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "torch": "2.7.1+cu118",
+  "numpy": "2.4.6",
+  "seed": 42,
+  "protocol": {
+    "fit_images": 198,
+    "val_normal_images": 22,
+    "test_images": 115,
+    "threshold_rule": "max anomaly score among the 22 held-out normal validation images (same rule applied to every model)",
+    "dev_final_split_file": "reports/metrics/metal_nut_test_dev_final.csv",
+    "test_set_reused": true,
+    "test_set_reuse_note": "Evaluation limitation: The official MVTec AD test set was reused during exploratory model comparisons and ablation studies. The reported metrics are development-stage results and may be optimistically biased. Independent evaluation on a separate validation set or additional unseen data is required before claiming final generalization performance.",
+    "protocol_note": "Exploratory comparison on the official test set of ONE category (metal_nut, 115 images). The dev/final split is a stratification used to reduce overfitting during analysis, not an independent evaluation set. Ablations are analysis, not selection; the reference configuration is unchanged."
+  },
+  "threshold": {
+    "rule": "max anomaly score among the 22 held-out normal validation images",
+    "status": "provisional",
+    "limitation": "22 normal images are too few to establish a reliable low false-positive rate. This threshold must not be presented as a calibrated probability or a guarantee of production performance. Future work: validate on a larger normal-image pool or with an explicit false-alarm objective."
+  },
+  "measurement_protocol": {
+    "hardware": "RTX 3050 Laptop, 4.29 GB VRAM",
+    "latency": "batch 1, warm-up discarded, median, CUDA synchronized",
+    "peak_gpu": "max_memory_allocated after reset; includes resident model, memory bank, and ~90 MB pre-loaded test images (same offset for every model)",
+    "artifact_mb": "persistent model parameters only; frozen backbone weights not counted",
+    "note_vs_exp6": "Exp 6 reported ~406 MB (batches on the fly); Exp 8 reports ~458 MB (test set pre-loaded). Model and bank footprints unchanged."
+  },
+  "reference_config": {
+    "image_size": 256,
+    "pool_kernel": 3,
+    "ratio": 0.1,
+    "sigma": 4.0
+  },
+  "models": {
+    "PatchCore": {
+      "backbone": "wide_resnet50_2 layer2+layer3 (frozen)",
+      "embedding": "concat -> adaptive channel avg-pool to 1024",
+      "coreset": "greedy k-center, 10%, proj_dim=128",
+      "indices_file": "metal_nut_coreset_indices_baseline1024.pt"
+    },
+    "PaDiM-lite": {
+      "features": "wide_resnet50_2 layer2+layer3 concat 1536, kernel 3",
+      "n_dims": 100,
+      "eps": 0.01,
+      "dims_seed": 42,
+      "smoothing_sigma": 4.0
+    },
+    "STFPM": {
+      "backbone": "resnet18 layers 1-3; teacher ImageNet-pretrained frozen, student random init",
+      "epochs": 100,
+      "optimizer": "SGD momentum 0.9, wd 1e-4",
+      "lr": 0.1,
+      "batch_size": 8,
+      "seeds": [
+        42
+      ],
+      "checkpoint_pattern": "models/metal_nut_stfpm_resnet18_seed<seed>.pt",
+      "epoch_selection": "none (fixed epochs)"
+    }
+  },
+  "ablation_random_bank_seeds": [
+    0,
+    1,
+    2
+  ],
+  "aupro_check": {
+    "src_auro": 0.937829425442864,
+    "dense": 0.9379977320649996,
+    "anomalib": null,
+    "abs_diff_src_dense": 0.00016830662213562775,
+    "note": "Cross-check between two independent implementations in this notebook. Not a third-party validation."
+  },
+  "reference_gate_vs_exp6": {
+    "image_auroc": 0.9995112414467253,
+    "pixel_auroc": 0.9887828066652831,
+    "aupro": 0.937829425442864
+  },
+  "reproduction_check": {
+    "exp6_aupro": 0.9366,
+    "exp8_aupro": 0.937829425442864,
+    "abs_diff": 0.001229425442863974,
+    "tolerance": 0.005,
+    "status": "within_tolerance",
+    "explanation": "The two AUPRO values differ by ~0.0012 because Experiment 6 scored the test set in batches on the fly, while Experiment 8 pre-loads the entire test set to GPU memory to stabilise timing. The intermediate interpolation path and tensor shapes differ slightly, which shifts the anomaly map values and hence the AUPRO integral by a small amount. The current `auro` also includes the single-FPR-case handling added during the AUPRO bug fix. The difference is well within the reproduction tolerance of 0.005, so the reference run is considered consistent within tolerance rather than numerically identical across experiments."
+  }
+}

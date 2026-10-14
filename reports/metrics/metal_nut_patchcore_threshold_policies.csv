@@ -1,0 +1,4 @@
+policy,threshold,tp,fp,fn,tn,precision,recall,f1,fpr,mean_dice_defective
+max of val normals,1.1672,93,2,0,20,0.9789,1.0,0.9894,0.0909,0.6892
+val mean + 2 std,1.1887,93,2,0,20,0.9789,1.0,0.9894,0.0909,0.6935
+val mean + 3 std,1.2564,90,0,3,22,1.0,0.9677,0.9836,0.0,0.6857

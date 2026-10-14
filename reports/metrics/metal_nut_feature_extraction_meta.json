@@ -1,0 +1,31 @@
+{
+  "category": "metal_nut",
+  "backbone": "wide_resnet50_2 (ImageNet1K_V1, frozen)",
+  "layers": [
+    "layer2",
+    "layer3"
+  ],
+  "image_size": 256,
+  "pool_kernel": 3,
+  "feature_grid": [
+    32,
+    32
+  ],
+  "n_train_images": 198,
+  "patches_per_image": 1024,
+  "total_patches": 202752,
+  "torch": "2.7.1+cu118",
+  "seed": 42,
+  "baseline": {
+    "method": "concat_then_channel_adaptive_avg_pool",
+    "embed_dim": 1024,
+    "extraction_seconds": 6.05,
+    "peak_gpu_mb": 483.4
+  },
+  "alternative": {
+    "method": "aligned_concat_preserve_all_channels",
+    "embed_dim": 1536,
+    "extraction_seconds": 6.54,
+    "peak_gpu_mb": 483.4
+  }
+}

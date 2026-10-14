@@ -1,0 +1,6 @@
+group,n,mean,min,max,flagged_above_threshold
+good,22,1.068,0.93,1.246,2
+bent,25,1.594,1.25,1.812,25
+color,22,1.587,1.28,1.872,22
+flip,23,1.79,1.71,1.909,23
+scratch,23,1.51,1.233,1.688,23

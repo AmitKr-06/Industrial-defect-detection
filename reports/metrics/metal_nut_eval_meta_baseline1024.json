@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-13",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "torch": "2.7.1+cu118",
+  "numpy": "2.4.6",
+  "backbone": "wide_resnet50_2 layer2+layer3 (frozen)",
+  "embed_mode": "baseline",
+  "embed_dim": 1024,
+  "bank_patches": 20275,
+  "bank_ratio": 0.1,
+  "sigma": 4.0,
+  "image_size": 256,
+  "pool_kernel": 3,
+  "seed": 42,
+  "threshold_policy": "max of val normals",
+  "threshold": 1.16659677028656,
+  "eval_note": "Threshold from 22 held-out normal images \u2014 provisional, not a guaranteed production false-alarm rate. Benchmark contains only the metal_nut category. Dev/final split is exploratory; a truly untouched test set would require a fresh data source.",
+  "aupro_validated": true
+}
