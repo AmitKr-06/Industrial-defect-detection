@@ -1,0 +1,20 @@
+{
+  "shape": [
+    198,
+    1024,
+    1024
+  ],
+  "grid": [
+    32,
+    32
+  ],
+  "seconds": 6.12,
+  "ms_per_image": 30.9,
+  "peak_gpu_mb": 317.7,
+  "layers": [
+    "layer2",
+    "layer3"
+  ],
+  "pool_kernel": 3,
+  "embed_dim": 1024
+}
