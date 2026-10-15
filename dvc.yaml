@@ -62,3 +62,29 @@ stages:
       - data_splitting.seed
     outs:
       - models/threshold.json
+  model_evaluation:
+    cmd: python -m src.evaluation.model_evaluation
+    deps:
+      - src/evaluation/model_evaluation.py
+      - src/evaluation/metrics.py
+      - src/evaluation/benchmark.py
+      - src/visualization/visualize.py
+      - src/model/patchcore.py
+      - src/model/coreset.py
+      - src/features/feature_extractor.py
+      - src/data/dataset.py
+      - models/memory_bank.pt
+      - models/threshold.json
+      - data/processed/splits.csv
+    params:
+      - preprocessing
+      - feature_extraction
+      - scoring
+      - evaluation
+      - data_splitting.seed
+    outs:
+      - reports/metrics/metrics_by_subset.csv
+      - reports/metrics/test_scores.csv
+    metrics:
+      - reports/metrics/metrics.json:
+          cache: false

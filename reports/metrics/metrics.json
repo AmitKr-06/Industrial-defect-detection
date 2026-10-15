@@ -1,0 +1,24 @@
+{
+  "image_auroc": 0.9995112414467253,
+  "image_ap": 0.9998856097002974,
+  "pixel_auroc": 0.988782806756938,
+  "aupro": 0.9379977616035733,
+  "aupro_dev": 0.9309904707193477,
+  "aupro_final": 0.9449278110806014,
+  "precision": 0.9789473684210527,
+  "recall": 1.0,
+  "f1": 0.9893617021276596,
+  "fp": 2,
+  "fn": 0,
+  "mean_dice": 0.6891773781726711,
+  "threshold": 1.16659677028656,
+  "reference_gate": "pass",
+  "latency_ms": 30.47691304344208,
+  "latency_all_ms": [
+    30.54,
+    30.34,
+    30.48
+  ],
+  "peak_gpu_mb": 416.569856,
+  "protocol": "bs=1, model only, images pre-loaded to GPU, median of reps"
+}
