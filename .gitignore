@@ -266,3 +266,7 @@ __pycache__/
 *.egg-info/
 .ipynb_checkpoints/
 reports/figures/
+
+mlflow.db
+mlruns/
+mlartifacts/
