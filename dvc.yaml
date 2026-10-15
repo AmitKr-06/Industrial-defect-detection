@@ -1,0 +1,36 @@
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+      - src/data/data_ingestion.py
+      - src/constants.py
+      - data/raw/metal_nut.tar.xz
+    params:
+      - data_ingestion
+    outs:
+      - data/raw/metal_nut
+      - data/processed/records.csv
+
+  data_splitting:
+    cmd: python -m src.data.data_splitting
+    deps:
+      - src/data/data_splitting.py
+      - src/constants.py
+      - data/processed/records.csv
+    params:
+      - data_splitting
+    outs:
+      - data/processed/splits.csv
+
+  feature_extraction:
+    cmd: python -m src.features.feature_extraction
+    deps:
+      - src/features/feature_extraction.py
+      - src/features/feature_extractor.py
+      - data/processed/splits.csv
+    params:
+      - preprocessing
+      - feature_extraction
+      - data_splitting.seed
+    outs:
+      - data/interim/fit_embeddings.pt
