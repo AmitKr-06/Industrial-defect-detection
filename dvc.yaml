@@ -44,3 +44,21 @@ stages:
       - memory_bank
     outs:
       - models/memory_bank.pt
+  threshold_calibration:
+    cmd: python -m src.model.threshold_calibration
+    deps:
+      - src/model/threshold_calibration.py
+      - src/model/patchcore.py
+      - src/model/coreset.py
+      - src/features/feature_extractor.py
+      - src/data/dataset.py
+      - models/memory_bank.pt
+      - data/processed/splits.csv
+    params:
+      - preprocessing
+      - feature_extraction
+      - scoring
+      - threshold
+      - data_splitting.seed
+    outs:
+      - models/threshold.json
