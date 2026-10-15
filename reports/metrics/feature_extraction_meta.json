@@ -8,8 +8,8 @@
     32,
     32
   ],
-  "seconds": 6.12,
-  "ms_per_image": 30.9,
+  "seconds": 5.61,
+  "ms_per_image": 28.4,
   "peak_gpu_mb": 317.7,
   "layers": [
     "layer2",
