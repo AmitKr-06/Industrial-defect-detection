@@ -13,11 +13,11 @@
   "mean_dice": 0.6891773781726711,
   "threshold": 1.16659677028656,
   "reference_gate": "pass",
-  "latency_ms": 30.345698260909717,
+  "latency_ms": 30.256112173905738,
   "latency_all_ms": [
-    30.35,
     30.3,
-    30.38
+    30.17,
+    30.26
   ],
   "peak_gpu_mb": 416.569856,
   "protocol": "bs=1, model only, images pre-loaded to GPU, median of reps"
