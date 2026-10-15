@@ -46,4 +46,4 @@ class MVTecDataset(Dataset):
         else:
             mask = torch.zeros(1, self.image_size, self.image_size)
         return {"image": image, "mask": mask, "label": int(r["label"]),
-                "detect_type": r["defect_type"], "path": r["path"]}
+                "defect_type": r["defect_type"], "path": r["path"]}
