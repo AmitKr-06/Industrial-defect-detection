@@ -34,3 +34,13 @@ stages:
       - data_splitting.seed
     outs:
       - data/interim/fit_embeddings.pt
+  memory_bank:
+    cmd: python -m src.models.memory_bank
+    deps:
+      - src/models/memory_bank.py
+      - src/models/coreset.py
+      - data/interim/fit_embeddings.pt
+    params:
+      - memory_bank
+    outs:
+      - models/memory_bank.pt

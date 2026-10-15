@@ -1,0 +1,9 @@
+{
+  "bank_patches": 20275,
+  "n_total_patches": 202752,
+  "bank_mb": 83.0,
+  "greedy_seconds": 18.0,
+  "ratio": 0.1,
+  "proj_dim": 128,
+  "seed": 42
+}
