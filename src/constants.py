@@ -14,3 +14,5 @@ SPLITS_FILE = "splits.csv"
 FIT_EMBEDDINGS_FILE = "fit_embeddings.pt"
 MEMORY_BANK_FILE = "memory_bank.pt"
 THRESHOLD_FILE = "threshold.json"
+
+EXPERIMENT_INFO_FILE = "experiment_info.json"
