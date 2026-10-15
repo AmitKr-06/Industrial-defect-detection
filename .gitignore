@@ -222,8 +222,10 @@ __marimo__/
 # ===== Project-specific =====
 
 # Datasets (MVTec AD is CC BY-NC-SA, don't redistribute)
-data/*
-!data/.gitkeep
+data/**
+!data/**/
+!data/**/*.dvc
+!data/**/.gitkeep
 *.tar.xz
 *.tar
 *.zip
@@ -258,3 +260,9 @@ outputs/
 Thumbs.db
 
 projectworkflow.txt
+
+logs/
+__pycache__/
+*.egg-info/
+.ipynb_checkpoints/
+reports/figures/
