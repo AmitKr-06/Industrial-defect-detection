@@ -28,4 +28,5 @@ pydantic
 pytest
 httpx
 
+mlflow>=2.14
 #-e .

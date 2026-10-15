@@ -37,3 +37,9 @@ evaluation:
     image_auroc: 0.9995
     pixel_auroc: 0.9888
     aupro: 0.9378
+
+mlflow:
+  tracking_uri: sqlite:///mlflow.db
+  experiment_name: patchcore-metal-nut
+  registered_model_name: patchcore-metal-nut
+  alias: champion

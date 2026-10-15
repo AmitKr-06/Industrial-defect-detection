@@ -69,6 +69,8 @@ stages:
       - src/evaluation/metrics.py
       - src/evaluation/benchmark.py
       - src/visualization/visualize.py
+      - src/tracking/mlflow_utils.py
+      - src/tracking/patchcore_pyfunc.py
       - src/model/patchcore.py
       - src/model/coreset.py
       - src/features/feature_extractor.py
@@ -85,6 +87,8 @@ stages:
     outs:
       - reports/metrics/metrics_by_subset.csv
       - reports/metrics/test_scores.csv
+      - reports/metrics/experiment_info.json:
+          cache: false
     metrics:
       - reports/metrics/metrics.json:
           cache: false
