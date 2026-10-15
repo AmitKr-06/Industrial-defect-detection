@@ -198,8 +198,8 @@ stages:
       size: 6040
     - path: src/evaluation/model_evaluation.py
       hash: md5
-      md5: e38c153f8f88b44b5a4b3f4686d1b869
-      size: 12027
+      md5: 1aea8ad2fa41511605adcc3dc99a9703
+      size: 12011
     - path: src/features/feature_extractor.py
       hash: md5
       md5: 39b7f84f53381db5fda828c00cf49773
@@ -214,8 +214,8 @@ stages:
       size: 6631
     - path: src/tracking/mlflow_utils.py
       hash: md5
-      md5: b99f5e975b3f661a199cae11f842acd9
-      size: 1870
+      md5: f6cafb744b877e3eff3e65883d866f77
+      size: 2711
     - path: src/tracking/patchcore_pyfunc.py
       hash: md5
       md5: a25bd9ec08d3a3f8c136c1dab8abf5d1
@@ -250,11 +250,11 @@ stages:
     outs:
     - path: reports/metrics/experiment_info.json
       hash: md5
-      md5: 85cbe9e6252a863662b68b70e48a62ec
+      md5: ba5ce7ab1ed1d63acf94c775f5f48a98
       size: 201
     - path: reports/metrics/metrics.json
       hash: md5
-      md5: d3667be4ac08199172781ff9dfe727f6
+      md5: 3b7eeb78d393e5dbf44e714e87f533df
       size: 632
     - path: reports/metrics/metrics_by_subset.csv
       hash: md5
