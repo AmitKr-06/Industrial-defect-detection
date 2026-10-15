@@ -1,0 +1,6 @@
+{
+  "run_id": "b14901430096498486ba4ab3fde8f2ad",
+  "experiment_name": "patchcore-metal-nut",
+  "model_name": "patchcore-metal-nut",
+  "model_uri": "runs:/b14901430096498486ba4ab3fde8f2ad/model"
+}
