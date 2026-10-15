@@ -1,0 +1,254 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+    - path: data/raw/metal_nut.tar.xz
+      hash: md5
+      md5: bfbc32e780827923f4b2c61923e364f7
+      size: 165414484
+    - path: src/constants.py
+      hash: md5
+      md5: 3ee655e41dfe18602b2710306e45ace7
+      size: 581
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 5e8091c08f1f3dc39289d3f780b72949
+      size: 5120
+    params:
+      params.yaml:
+        data_ingestion:
+          category: metal_nut
+          archive_name: metal_nut.tar.xz
+    outs:
+    - path: data/processed/records.csv
+      hash: md5
+      md5: 4a8dbe828a2aa1d2a86aa4a4dbca20ca
+      size: 22395
+    - path: data/raw/metal_nut
+      hash: md5
+      md5: f3c0f1887a452b0b4ea967567be8969c.dir
+      size: 165862477
+      nfiles: 430
+  data_splitting:
+    cmd: python -m src.data.data_splitting
+    deps:
+    - path: data/processed/records.csv
+      hash: md5
+      md5: 4a8dbe828a2aa1d2a86aa4a4dbca20ca
+      size: 22395
+    - path: src/constants.py
+      hash: md5
+      md5: 3ee655e41dfe18602b2710306e45ace7
+      size: 581
+    - path: src/data/data_splitting.py
+      hash: md5
+      md5: e3a57c1f3ee0a09fcb20b4666c795fcb
+      size: 2818
+    params:
+      params.yaml:
+        data_splitting:
+          val_fraction: 0.1
+          seed: 42
+    outs:
+    - path: data/processed/splits.csv
+      hash: md5
+      md5: 23828d1ddc79fd0b530b8e43ca8fe9fd
+      size: 24818
+  feature_extraction:
+    cmd: python -m src.features.feature_extraction
+    deps:
+    - path: data/processed/splits.csv
+      hash: md5
+      md5: 23828d1ddc79fd0b530b8e43ca8fe9fd
+      size: 24818
+    - path: src/features/feature_extraction.py
+      hash: md5
+      md5: e33be67211ef12fa246874a5a95549d9
+      size: 5322
+    - path: src/features/feature_extractor.py
+      hash: md5
+      md5: 39b7f84f53381db5fda828c00cf49773
+      size: 6124
+    params:
+      params.yaml:
+        data_splitting.seed: 42
+        feature_extraction:
+          layers:
+          - layer2
+          - layer3
+          pool_kernel: 3
+          embed_dim: 1024
+        preprocessing:
+          image_size: 256
+          batch_size: 8
+    outs:
+    - path: data/interim/fit_embeddings.pt
+      hash: md5
+      md5: e682342f9998538f044ceb67bd57fa3a
+      size: 830473818
+  memory_bank:
+    cmd: python -m src.model.memory_bank
+    deps:
+    - path: data/interim/fit_embeddings.pt
+      hash: md5
+      md5: e682342f9998538f044ceb67bd57fa3a
+      size: 830473818
+    - path: src/model/coreset.py
+      hash: md5
+      md5: 33593999a19e0b95f6b151de36384302
+      size: 3697
+    - path: src/model/memory_bank.py
+      hash: md5
+      md5: b0cb41f54a083e809d5c4e8d21c2e362
+      size: 6226
+    params:
+      params.yaml:
+        memory_bank:
+          ratio: 0.1
+          proj_dim: 128
+          seed: 42
+    outs:
+    - path: models/memory_bank.pt
+      hash: md5
+      md5: 7c7622aedd65c9cb28c1c1ebe3b8dc7d
+      size: 83210565
+  threshold_calibration:
+    cmd: python -m src.model.threshold_calibration
+    deps:
+    - path: data/processed/splits.csv
+      hash: md5
+      md5: 23828d1ddc79fd0b530b8e43ca8fe9fd
+      size: 24818
+    - path: models/memory_bank.pt
+      hash: md5
+      md5: 7c7622aedd65c9cb28c1c1ebe3b8dc7d
+      size: 83210565
+    - path: src/data/dataset.py
+      hash: md5
+      md5: eda23a8e4ddedd9bc585deb79d34c3c3
+      size: 2239
+    - path: src/features/feature_extractor.py
+      hash: md5
+      md5: 39b7f84f53381db5fda828c00cf49773
+      size: 6124
+    - path: src/model/coreset.py
+      hash: md5
+      md5: 33593999a19e0b95f6b151de36384302
+      size: 3697
+    - path: src/model/patchcore.py
+      hash: md5
+      md5: 743856ead96546401d5457b8e1cf3a8d
+      size: 6631
+    - path: src/model/threshold_calibration.py
+      hash: md5
+      md5: 2a7c6504c4fdb7547cd99fb28e4402af
+      size: 4941
+    params:
+      params.yaml:
+        data_splitting.seed: 42
+        feature_extraction:
+          layers:
+          - layer2
+          - layer3
+          pool_kernel: 3
+          embed_dim: 1024
+        preprocessing:
+          image_size: 256
+          batch_size: 8
+        scoring:
+          sigma: 4.0
+          aggregation: max
+          chunk: 512
+        threshold:
+          policy: max
+          k_std: 3.0
+          quantile: 0.99
+    outs:
+    - path: models/threshold.json
+      hash: md5
+      md5: d5a50dc3465dd9408a733f9c1de1ad26
+      size: 273
+  model_evaluation:
+    cmd: python -m src.evaluation.model_evaluation
+    deps:
+    - path: data/processed/splits.csv
+      hash: md5
+      md5: 23828d1ddc79fd0b530b8e43ca8fe9fd
+      size: 24818
+    - path: models/memory_bank.pt
+      hash: md5
+      md5: 7c7622aedd65c9cb28c1c1ebe3b8dc7d
+      size: 83210565
+    - path: models/threshold.json
+      hash: md5
+      md5: d5a50dc3465dd9408a733f9c1de1ad26
+      size: 273
+    - path: src/data/dataset.py
+      hash: md5
+      md5: eda23a8e4ddedd9bc585deb79d34c3c3
+      size: 2239
+    - path: src/evaluation/benchmark.py
+      hash: md5
+      md5: 158be3ab586abb9cc498be5a3e8fabd3
+      size: 2484
+    - path: src/evaluation/metrics.py
+      hash: md5
+      md5: 7f87d6531caec2ff0ee4c550a0f38ff8
+      size: 6040
+    - path: src/evaluation/model_evaluation.py
+      hash: md5
+      md5: 13418a1fab90398aa2818d5fd8c6ee42
+      size: 9483
+    - path: src/features/feature_extractor.py
+      hash: md5
+      md5: 39b7f84f53381db5fda828c00cf49773
+      size: 6124
+    - path: src/model/coreset.py
+      hash: md5
+      md5: 33593999a19e0b95f6b151de36384302
+      size: 3697
+    - path: src/model/patchcore.py
+      hash: md5
+      md5: 743856ead96546401d5457b8e1cf3a8d
+      size: 6631
+    - path: src/visualization/visualize.py
+      hash: md5
+      md5: ba1f9320e24cbf9099174e65d8b3cfd4
+      size: 2657
+    params:
+      params.yaml:
+        data_splitting.seed: 42
+        evaluation:
+          bench_warmup: 10
+          bench_reps: 3
+          reference:
+            image_auroc: 0.9995
+            pixel_auroc: 0.9888
+            aupro: 0.9378
+        feature_extraction:
+          layers:
+          - layer2
+          - layer3
+          pool_kernel: 3
+          embed_dim: 1024
+        preprocessing:
+          image_size: 256
+          batch_size: 8
+        scoring:
+          sigma: 4.0
+          aggregation: max
+          chunk: 512
+    outs:
+    - path: reports/metrics/metrics.json
+      hash: md5
+      md5: 185aa599d5d3a5cb2c2847a1c7c93961
+      size: 632
+    - path: reports/metrics/metrics_by_subset.csv
+      hash: md5
+      md5: 0808b409c15418930658c7110555a191
+      size: 913
+    - path: reports/metrics/test_scores.csv
+      hash: md5
+      md5: 79dc89afa687ccd5509ef54f99edfc5c
+      size: 13647
