@@ -92,3 +92,14 @@ stages:
     metrics:
       - reports/metrics/metrics.json:
           cache: false
+  model_registry:
+    cmd: python -m src.model.model_registry
+    deps:
+      - src/model/model_registry.py
+      - src/tracking/mlflow_utils.py
+      - reports/metrics/experiment_info.json
+    params:
+      - mlflow
+    outs:
+      - reports/metrics/registration_info.json:
+          cache: false

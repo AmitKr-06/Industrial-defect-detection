@@ -9,8 +9,8 @@ stages:
       size: 165414484
     - path: src/constants.py
       hash: md5
-      md5: fc003ace9194e5211c382376c484053d
-      size: 630
+      md5: c6f975ceb56a715831c269b2082bda50
+      size: 730
     - path: src/data/data_ingestion.py
       hash: md5
       md5: 5e8091c08f1f3dc39289d3f780b72949
@@ -39,8 +39,8 @@ stages:
       size: 22395
     - path: src/constants.py
       hash: md5
-      md5: fc003ace9194e5211c382376c484053d
-      size: 630
+      md5: c6f975ceb56a715831c269b2082bda50
+      size: 730
     - path: src/data/data_splitting.py
       hash: md5
       md5: e3a57c1f3ee0a09fcb20b4666c795fcb
@@ -214,8 +214,8 @@ stages:
       size: 6631
     - path: src/tracking/mlflow_utils.py
       hash: md5
-      md5: f6cafb744b877e3eff3e65883d866f77
-      size: 2711
+      md5: 6da99019eb145093ab9cfafefec1a3af
+      size: 4668
     - path: src/tracking/patchcore_pyfunc.py
       hash: md5
       md5: a25bd9ec08d3a3f8c136c1dab8abf5d1
@@ -250,12 +250,12 @@ stages:
     outs:
     - path: reports/metrics/experiment_info.json
       hash: md5
-      md5: ba5ce7ab1ed1d63acf94c775f5f48a98
+      md5: 5ad04de168c1b4ab0dfe5ef5fda6bf5d
       size: 201
     - path: reports/metrics/metrics.json
       hash: md5
-      md5: 3b7eeb78d393e5dbf44e714e87f533df
-      size: 632
+      md5: 012fb9d39c504d49c7a7989f129ae301
+      size: 633
     - path: reports/metrics/metrics_by_subset.csv
       hash: md5
       md5: 0808b409c15418930658c7110555a191
@@ -264,3 +264,37 @@ stages:
       hash: md5
       md5: 79dc89afa687ccd5509ef54f99edfc5c
       size: 13647
+  model_registry:
+    cmd: python -m src.model.model_registry
+    deps:
+    - path: reports/metrics/experiment_info.json
+      hash: md5
+      md5: 5ad04de168c1b4ab0dfe5ef5fda6bf5d
+      size: 201
+    - path: src/model/model_registry.py
+      hash: md5
+      md5: 5882877ab0b81a74cf461a98ac428dbf
+      size: 6804
+    - path: src/tracking/mlflow_utils.py
+      hash: md5
+      md5: 6da99019eb145093ab9cfafefec1a3af
+      size: 4668
+    params:
+      params.yaml:
+        mlflow:
+          mode: local
+          tracking_uri: sqlite:///mlflow.db
+          experiment_name: patchcore-metal-nut
+          registered_model_name: patchcore-metal-nut
+          alias: champion
+          champion_tolerance: 0.005
+          registration_gate:
+            image_auroc: 0.99
+            pixel_auroc: 0.98
+            aupro: 0.92
+            max_fn: 3
+    outs:
+    - path: reports/metrics/registration_info.json
+      hash: md5
+      md5: acb092ae4d42fc50bf469a50ed548b8c
+      size: 362

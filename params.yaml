@@ -39,7 +39,14 @@ evaluation:
     aupro: 0.9378
 
 mlflow:
+  mode: local                    # local | production (the env variable MLFLOW_MODE overrides this)
   tracking_uri: sqlite:///mlflow.db
   experiment_name: patchcore-metal-nut
   registered_model_name: patchcore-metal-nut
   alias: champion
+  champion_tolerance: 0.005      # same tie rule as Exp 7/8: differences under 0.005 AUPRO are a tie
+  registration_gate:             # a model below any of these is NOT registered
+    image_auroc: 0.99
+    pixel_auroc: 0.98
+    aupro: 0.92
+    max_fn: 3                    # most missed defects allowed (reference run: 0)
