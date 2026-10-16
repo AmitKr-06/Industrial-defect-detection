@@ -103,3 +103,14 @@ stages:
     outs:
       - reports/metrics/registration_info.json:
           cache: false
+  model_promotion:
+    cmd: python -m src.model.model_promotion
+    deps:
+      - src/model/model_promotion.py
+      - src/tracking/mlflow_utils.py
+      - reports/metrics/registration_info.json
+    params:
+      - mlflow
+    outs:
+      - reports/metrics/promotion_info.json:
+          cache: false
