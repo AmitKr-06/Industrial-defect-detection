@@ -298,3 +298,37 @@ stages:
       hash: md5
       md5: acb092ae4d42fc50bf469a50ed548b8c
       size: 362
+  model_promotion:
+    cmd: python -m src.model.model_promotion
+    deps:
+    - path: reports/metrics/registration_info.json
+      hash: md5
+      md5: acb092ae4d42fc50bf469a50ed548b8c
+      size: 362
+    - path: src/model/model_promotion.py
+      hash: md5
+      md5: 7029e0f53832f8a6b42017a5830eec39
+      size: 5572
+    - path: src/tracking/mlflow_utils.py
+      hash: md5
+      md5: 6da99019eb145093ab9cfafefec1a3af
+      size: 4668
+    params:
+      params.yaml:
+        mlflow:
+          mode: local
+          tracking_uri: sqlite:///mlflow.db
+          experiment_name: patchcore-metal-nut
+          registered_model_name: patchcore-metal-nut
+          alias: champion
+          champion_tolerance: 0.005
+          registration_gate:
+            image_auroc: 0.99
+            pixel_auroc: 0.98
+            aupro: 0.92
+            max_fn: 3
+    outs:
+    - path: reports/metrics/promotion_info.json
+      hash: md5
+      md5: 179372e5aedf1034de437dd39a7d1bce
+      size: 269
