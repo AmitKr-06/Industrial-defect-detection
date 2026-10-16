@@ -1,9 +1,9 @@
 {
   "model_name": "patchcore-metal-nut",
   "staging_version": 2,
-  "previous_champion_version": null,
+  "previous_champion_version": 2,
   "staging_aupro": 0.9379977616035733,
   "promoted": true,
-  "reason": "no champion exists yet",
+  "reason": "staging AUPRO 0.9380 >= champion 0.9380- tolerance 0.005",
   "serving_alias": "champion"
 }
