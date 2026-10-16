@@ -1,6 +1,6 @@
 {
-  "run_id": "b14901430096498486ba4ab3fde8f2ad",
+  "run_id": "dfc16ffe661246908dcf1e1b47da71e2",
   "experiment_name": "patchcore-metal-nut",
   "model_name": "patchcore-metal-nut",
-  "model_uri": "runs:/b14901430096498486ba4ab3fde8f2ad/model"
+  "model_uri": "runs:/dfc16ffe661246908dcf1e1b47da71e2/model"
 }

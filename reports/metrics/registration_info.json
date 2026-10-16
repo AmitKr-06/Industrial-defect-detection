@@ -1,0 +1,14 @@
+{
+  "model_name": "patchcore-metal-nut",
+  "version": 2,
+  "alias": "staging",
+  "run_id": "dfc16ffe661246908dcf1e1b47da71e2",
+  "model_uri": "runs:/dfc16ffe661246908dcf1e1b47da71e2/model",
+  "metrics": {
+    "image_auroc": 0.9995112414467253,
+    "pixel_auroc": 0.988782806756938,
+    "aupro": 0.9379977616035733,
+    "fp": 2.0,
+    "fn": 0.0
+  }
+}
