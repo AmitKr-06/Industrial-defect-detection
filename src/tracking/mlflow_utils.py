@@ -4,54 +4,89 @@ settings live in ONE place (params.yaml -> mlflow section).
 """
 
 import re
-from pathlib import Path
-
+import os
 import mlflow
+from dotenv import load_dotenv
+
+from pathlib import Path
 
 from src.config import PROJECT_ROOT
 from src.logger import logging
+import warnings
 
+# Silence the noisy MLflow pyfunc UserWarnings (input_example, artifact_path, etc.)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 _ILLEGAL = re.compile(r"[^0-9A-Za-z_\-\. /]")
 
-
-def _resolve_tracking_uri(uri: str) -> str:
+def resolve_tracking_uri(uri: str) -> str:
     """
-    Resolve a relative sqlite tracking URI to an absolute path so the database
-    always lives under the project root, no matter where the script is launched.
+    Anchor a relative sqlite tracking URI to PROJECT_ROOT so the database
+    always lives at <project_root>/mlflow.db, no matter the current working
+    directory when the script runs.
 
-    Example:
-        "sqlite:///mlflow.db"  ->  "sqlite:////abs/path/to/project/mlflow.db"
+    Example: sqlite:///mlflow.db -> sqlite:///C:/.../project/mlflow.db
     """
     if not uri.startswith("sqlite:///"):
         return uri
-
-    # Strip the scheme. What remains is a relative or absolute file path.
     raw = uri[len("sqlite:///"):]
-
-    # Already absolute? Leave it alone.
     if Path(raw).is_absolute():
         return uri
+    return f"sqlite:///{(PROJECT_ROOT / raw).resolve().as_posix()}"
 
-    # Otherwise, anchor to the project root.
-    abs_path = (PROJECT_ROOT / raw).resolve()
-    # SQLite URIs need four slashes when the path is absolute:
-    #   sqlite:////home/user/project/mlflow.db
-    return f"sqlite:///{abs_path.as_posix()}"
+def use_local_tracking(cfg: dict) -> None:
+    """
+    LOCAL method.
+    What it does : sends everything to a SQLite file in the project folder (mlflow.db)
+    What we do   : no server and no credentials needed. The model registry needs a database
+                   store, which is why this is sqlite and not a plain ./mlruns folder.
+                   Use this on local tracking / laptop. Open the UI with
+                   'mlflow ui --backend-store-uri sqlite:///mlflow.db'.
+    """
+    uri = resolve_tracking_uri(cfg["tracking_uri"])
+    mlflow.set_tracking_uri(uri)
+    logging.info("MLflow mode: LOCAL (%s)", uri)
+
+
+def use_production_tracking(cfg: dict) -> None:
+    """
+    PRODUCTION method.
+    What it does : sends everything to a remote MLflow tracking server that we host
+                   (EC2, a VM, Docker ....).
+    What we do   : the server address comes from the environment (.env file locally, real
+                   environment variables in CI or on the server), never from the code.
+                   Username and password are optional and only needed if the server has
+                   basic authentication; MLflow reads them from the environment itself.
+    """
+
+    uri = os.getenv("MLFLOW_TRACKING_URI")
+    if not uri:
+        raise EnvironmentError("MLFLOW_TRACKING_URI is not set. Add it to .env or the environment.")
+    if not os.getenv("MLFLOW_TRACKING_USERNAME"):
+        logging.warning("MLFLOW_TRACKING_USERNAME is not set. Fine only if the server has no authentication.")
+    mlflow.set_tracking_uri(uri)
+    logging.info("MLflow mode: PRODUCTION (%s)", uri)
 
 
 def setup_mlflow(cfg: dict) -> None:
     """
-    Point MLflow at our local database and select the experiment.
-
-    The tracking URI from params.yaml is resolved to an absolute path so the
-    SQLite database always lives at <PROJECT_ROOT>/mlflow.db, regardless of the
-    current working directory when this function is called.
+    What it does : chooses local or production tracking and selects the experiment.
+    What we do   : load .env first, then read the mode from the MLFLOW_MODE environment
+                   variable, falling back to mlflow.mode in params.yaml. Because the mode
+                   comes from the environment, switching it never changes params.yaml and
+                   never triggers a DVC rerun. Every file that talks to MLflow calls this
+                   fucntion, so they all use the same server.
     """
-    uri = _resolve_tracking_uri(cfg["tracking_uri"])
-    mlflow.set_tracking_uri(uri)
+    # Load environment variables from .env file
+    load_dotenv()
+    mode = os.getenv("MLFLOW_MODE", cfg.get("mode", "local")).lower()
+    if mode == "production":
+        use_production_tracking(cfg)
+    elif mode == "local":
+        use_local_tracking(cfg)
+    else:
+        raise ValueError(f"Unknown MLflow mode: {mode} (use 'local or 'production')")
     mlflow.set_experiment(cfg["experiment_name"])
-    logging.info("MLflow: %s | experiment %s", uri, cfg["experiment_name"])
 
 
 def flatten_params(d: dict, prefix: str = "") -> dict:
