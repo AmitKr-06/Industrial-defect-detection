@@ -16,3 +16,7 @@ MEMORY_BANK_FILE = "memory_bank.pt"
 THRESHOLD_FILE = "threshold.json"
 
 EXPERIMENT_INFO_FILE = "experiment_info.json"
+
+REGISTRATION_INFO_FILE = "registration_info.json"
+
+PROMOTION_INFO_FILE = "promotion_info.json"
