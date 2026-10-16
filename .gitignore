@@ -270,3 +270,9 @@ reports/figures/
 mlflow.db
 mlruns/
 mlartifacts/
+
+# DVC runtime
+.dvc/cache/
+.dvc/tmp/
+.dvc/config.local
+server.db
