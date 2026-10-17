@@ -245,3 +245,13 @@ models/*
 !models/.gitkeep
 # Deployed model files: tracked in git so CI/CD can build the Docker image
 # (these two lines must stay AFTER "models/*" and "*.pt", a later rule
+
+# Local tooling, scratch and runtime files
+.vscode/
+mlflow.db
+mlruns/
+mlartifacts/
+server.db
+server_artifacts/
+projectworkflow.txt
+uploads/
