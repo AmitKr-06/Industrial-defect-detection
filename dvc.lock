@@ -62,6 +62,10 @@ stages:
       hash: md5
       md5: 23828d1ddc79fd0b530b8e43ca8fe9fd
       size: 24818
+    - path: src/data/dataset.py
+      hash: md5
+      md5: eda23a8e4ddedd9bc585deb79d34c3c3
+      size: 2239
     - path: src/features/feature_extraction.py
       hash: md5
       md5: e33be67211ef12fa246874a5a95549d9
