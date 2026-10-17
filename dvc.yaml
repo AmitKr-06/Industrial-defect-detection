@@ -27,6 +27,7 @@ stages:
     deps:
       - src/features/feature_extraction.py
       - src/features/feature_extractor.py
+      - src/data/dataset.py
       - data/processed/splits.csv
     params:
       - preprocessing
@@ -34,6 +35,7 @@ stages:
       - data_splitting.seed
     outs:
       - data/interim/fit_embeddings.pt
+
   memory_bank:
     cmd: python -m src.model.memory_bank
     deps:
@@ -43,7 +45,9 @@ stages:
     params:
       - memory_bank
     outs:
-      - models/memory_bank.pt
+      - models/memory_bank.pt:
+          cache: false
+
   threshold_calibration:
     cmd: python -m src.model.threshold_calibration
     deps:
@@ -61,7 +65,9 @@ stages:
       - threshold
       - data_splitting.seed
     outs:
-      - models/threshold.json
+      - models/threshold.json:
+          cache: false
+
   model_evaluation:
     cmd: python -m src.evaluation.model_evaluation
     deps:
@@ -92,6 +98,7 @@ stages:
     metrics:
       - reports/metrics/metrics.json:
           cache: false
+
   model_registry:
     cmd: python -m src.model.model_registry
     deps:
@@ -103,6 +110,7 @@ stages:
     outs:
       - reports/metrics/registration_info.json:
           cache: false
+
   model_promotion:
     cmd: python -m src.model.model_promotion
     deps:

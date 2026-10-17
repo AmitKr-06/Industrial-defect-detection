@@ -243,36 +243,5 @@ artifacts/*
 *.pkl
 models/*
 !models/.gitkeep
-
-# Inference outputs and uploads from the API
-results/
-uploads/
-outputs/
-
-# Notebook outputs / scratch
-*.nbconvert.ipynb
-.virtual_documents/
-
-# Editors and OS
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-
-projectworkflow.txt
-
-logs/
-__pycache__/
-*.egg-info/
-.ipynb_checkpoints/
-reports/figures/
-
-mlflow.db
-mlruns/
-mlartifacts/
-
-# DVC runtime
-.dvc/cache/
-.dvc/tmp/
-.dvc/config.local
-server.db
+# Deployed model files: tracked in git so CI/CD can build the Docker image
+# (these two lines must stay AFTER "models/*" and "*.pt", a later rule
