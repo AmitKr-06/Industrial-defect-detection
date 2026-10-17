@@ -7,6 +7,9 @@ pillow>=10.0
 matplotlib>=3.8
 pyyaml>=6.0
 python-dotenv>=1.0
-# add only if your app/ files import them:
-# scipy
-# mlflow          (only for MODEL_SOURCE=registry, it is large)
+
+# Needed by src/pipeline/predict_pipeline.py
+scipy>=1.14
+
+# Uncomment only if MODEL_SOURCE=registry
+# mlflow>=2.0

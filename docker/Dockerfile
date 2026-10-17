@@ -12,16 +12,20 @@ RUN pip install --no-cache-dir torch==2.7.1 torchvision==0.22.1 \
         --index-url https://download.pytorch.org/whl/cpu
 
 # 2) Remaining Python dependencies
-COPY docker-requirements.txt .
+COPY docker/docker-requirements.txt .
 RUN pip install --no-cache-dir -r docker-requirements.txt
 
 # 3) Download the backbone weights into the image (no internet needed at runtime)
 RUN python -c "from torchvision.models import wide_resnet50_2, Wide_ResNet50_2_Weights; wide_resnet50_2(weights=Wide_ResNet50_2_Weights.IMAGENET1K_V1)"
 
-# 4) Application code (changes often, so it comes last)
+# 4) Application code 
 COPY app/ ./app/
 COPY src/ ./src/
 COPY params.yaml .
+
+# 4b) ONLY the two inference artifacts — NOT the 2.1 GB of training dumps
+COPY models/memory_bank.pt ./models/
+COPY models/threshold.json ./models/
 
 # 5) Non-root user with writable logs and uploads folders
 RUN useradd --create-home appuser \

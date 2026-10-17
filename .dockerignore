@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Artifacts / runtime data
+logs/
+uploads/
+*.log
+
+# VCS
+.git/
+.gitignore
+
+# Local dev
+.venv/
+venv/
+notebooks/
+*.ipynb
+.DS_Store
+Thumbs.db
