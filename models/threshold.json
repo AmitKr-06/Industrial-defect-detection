@@ -1,0 +1,11 @@
+{
+  "threshold": 1.16659677028656,
+  "policy": "max",
+  "k_std": 3.0,
+  "quantile": 0.99,
+  "n_val": 22,
+  "val_mean": 1.062306523323059,
+  "val_std": 0.06674304604530334,
+  "val_max": 1.16659677028656,
+  "status": "provisional (calibrated on 22 normal images)"
+}
