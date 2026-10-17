@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Predict · DefectVision{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Inspect a metal nut in seconds</h1>
+  <p class="lede">
+    Upload an image. The model compares it against a memory bank of normal
+    parts and highlights any pixel that does not belong.
+  </p>
+</section>
+
+<form id="upload-form" class="upload-card" action="/predict/view" method="post" enctype="multipart/form-data">
+  <label for="file-input" class="drop-zone" id="drop-zone">
+    <input id="file-input" name="file" type="file" accept="image/png,image/jpeg,image/bmp" required hidden />
+    <div class="drop-zone-inner">
+      <div class="drop-icon">⬆</div>
+      <p class="drop-title">Drop an image here, or click to browse</p>
+      <p class="drop-hint">PNG, JPG, or BMP · up to 10 MB</p>
+    </div>
+    <div class="preview" id="preview" hidden>
+      <img id="preview-img" alt="Preview" />
+    </div>
+  </label>
+
+  <div class="actions">
+    <button type="button" id="clear-btn" class="btn ghost" hidden>Clear</button>
+    <button type="submit" id="submit-btn" class="btn primary" disabled>Analyse image</button>
+  </div>
+</form>
+
+<section class="samples">
+  <h2>Try a sample</h2>
+  <div class="sample-grid">
+    <a class="sample" href="#" data-sample="good">Normal</a>
+    <a class="sample" href="#" data-sample="bent">Bent</a>
+    <a class="sample" href="#" data-sample="color">Colour</a>
+    <a class="sample" href="#" data-sample="flip">Flip</a>
+    <a class="sample" href="#" data-sample="scratch">Scratch</a>
+  </div>
+</section>
+{% endblock %}

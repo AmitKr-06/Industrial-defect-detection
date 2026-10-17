@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Result · DefectVision{% endblock %}
+
+{% block content %}
+<section class="result-header">
+  <a href="/" class="back-link">← Analyse another</a>
+  <div class="verdict {{ 'defective' if result.is_defective else 'normal' }}">
+    <span class="verdict-dot"></span>
+    <span class="verdict-label">{{ result.label }}</span>
+  </div>
+</section>
+
+<section class="result-images">
+  <figure class="card">
+    <figcaption>Input image</figcaption>
+    <img src="{{ result.original_url }}" alt="Analysed image" />
+  </figure>
+  <figure class="card">
+    <figcaption>Anomaly heatmap</figcaption>
+    <img src="{{ result.heatmap_url }}" alt="Heatmap overlay" />
+    <p class="legend">Blue = normal, red = clearly above the threshold.</p>
+  </figure>
+  <figure class="card">
+    <figcaption>Flagged region</figcaption>
+    <img src="{{ result.mask_url }}" alt="Predicted defect mask" />
+    <p class="legend">White = pixels above the threshold.</p>
+  </figure>
+</section>
+
+<section class="card metrics">
+  <h2>Score</h2>
+  <div class="metric-row">
+    <span class="metric-label">Anomaly score</span>
+    <span class="metric-value">{{ '%.4f'|format(result.score) }}</span>
+  </div>
+  <div class="metric-row">
+    <span class="metric-label">Threshold</span>
+    <span class="metric-value">{{ '%.4f'|format(result.threshold) }}</span>
+  </div>
+  <div class="metric-row">
+    <span class="metric-label">Ratio</span>
+    <span class="metric-value">{{ '%.2f'|format(result.ratio) }}×</span>
+  </div>
+  <div class="metric-row">
+    <span class="metric-label">Model latency</span>
+    <span class="metric-value">{{ '%.1f'|format(result.latency_ms) }} ms</span>
+  </div>
+
+  <div class="bar" aria-hidden="true">
+    <div class="bar-fill" style="width: {{ 100 if result.ratio > 2 else (result.ratio / 2) * 100 }}%"></div>
+    <div class="bar-threshold" style="left: 50%"></div>
+  </div>
+  <p class="bar-caption">Ratio of score to threshold (the tick marks 1.0×)</p>
+
+  {% if result.is_defective and result.ratio < 1.15 %}
+  <p class="note warn">Borderline result: the score is only slightly above the threshold. Please review this part manually.</p>
+  {% elif not result.is_defective and result.ratio > 0.9 %}
+  <p class="note info">The score is close to the threshold. The part passed, but it is near the limit.</p>
+  {% endif %}
+</section>
+
+<section class="card details">
+  <h2>Where the model flagged</h2>
+  <div class="stat-grid">
+    <div><span>Flagged area</span><strong>{{ '%.2f'|format(result.area_pct) }}%</strong></div>
+    <div><span>Regions</span><strong>{{ result.n_regions }}</strong></div>
+    <div><span>Peak location</span><strong>row {{ result.max_location[0] }}, col {{ result.max_location[1] }}</strong></div>
+  </div>
+</section>
+{% endblock %}

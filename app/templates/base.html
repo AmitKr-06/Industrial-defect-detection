@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Industrial Defect Detection{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css?v=2" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">◆</span>
+        <span class="brand-name">DefectVision</span>
+      </a>
+      <nav class="nav">
+        <a href="/">Predict</a>
+        <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+        <a href="/health" target="_blank" rel="noopener">Health</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>PatchCore · WideResNet50-2 · MVTec AD (metal_nut)</p>
+    </div>
+  </footer>
+
+  <script src="/static/app.js?v=2"></script>
+</body>
+</html>

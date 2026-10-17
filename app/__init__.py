@@ -1,0 +1,1 @@
+"""FastAPI service for industrial defect detection."""
