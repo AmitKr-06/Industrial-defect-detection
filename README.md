@@ -11,6 +11,36 @@ The project covers the full path from raw data to a deployed service:
 - a **FastAPI** service with a browser interface and a JSON API
 - a **Docker** image, **GitHub Actions** CI/CD, and a pytest suite
 
+## Architecture
+
+```mermaid
+flowchart TD
+    A[Image Upload] --> B[Validation and Preprocessing]
+    B --> C[WideResNet50-2 Patch Features]
+    C --> D[Nearest-Neighbour Search]
+    D --> E[Anomaly Map and Image Score]
+    E --> F[Threshold Decision]
+    F --> G[Heatmap, Mask and Label]
+    G --> H[FastAPI Web App and JSON API]
+
+    M[Memory Bank and Threshold] --> D
+    M --> F
+
+    I[DVC Pipeline] --> J[Data Audit and Splitting]
+    J --> K[Feature Extraction and Coreset]
+    K --> L[Threshold Calibration]
+    L --> M
+    L --> N[Model Evaluation]
+    N --> O[MLflow Tracking]
+    O --> P[Model Registry and Quality Gate]
+    P --> Q[Champion Promotion]
+
+    R[GitHub Actions CI/CD] --> S[Docker]
+    S -. packages .-> H
+```
+
+The DVC pipeline builds the memory bank and threshold from normal images only. The web app does not train anything: it loads the memory bank and threshold (or the `champion` model from the registry) and scores each uploaded image.
+
 ## Layout
 
 | Path | What it contains |
